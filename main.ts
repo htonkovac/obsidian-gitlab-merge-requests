@@ -2,6 +2,8 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab } from './src/settings';
 import GitlabApi from './src/gitlab-api';
 import GitlabMergeRequests from './src/gitlab-mr';
+// import { GitlabMergeRequestsRenderer } from './src/rendering/gitlab-mr-renderer';
+
 // Remember to rename these classes and interfaces!
 
 // interface MyPluginSettings {
@@ -26,10 +28,10 @@ export default class MyPlugin extends Plugin {
 			date.setDate(date.getDate() - 30);
 
 			const url = `${this.settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
-			GitlabApi.load<Array<GitlabMergeRequests>>(url, this.settings.gitlabToken)
+			GitlabApi.load<Array<any>>(url, this.settings.gitlabToken)
 			// GitlabApi.load<Array<GitlabMergeRequests>>(url, this.settings.gitlabToken)
 				// .then((response: Array<GitlabMergeRequests>) => {
-				.then((response: Array<GitlabMergeRequests>) => {
+				.then((response: Array<any>) => {
 					const my_ref = "htonkovac/test-project-123!2"
 					console.log(url);
 
@@ -39,6 +41,26 @@ export default class MyPlugin extends Plugin {
 					// 	return array
 					// })
 					
+					response.forEach(element => {
+						// open file for writing wiht filename being element.references.full
+						// write element to file
+						// close file
+						console.log(element.references.full);
+						var path = require('path');						
+						this.app.vault.createFolder(path.dirname(element.references.full)).catch((err: any) => {
+							console.log(err);
+						});
+						this.app.vault.adapter.write(element.references.full+".md", "---\n"+JSON.stringify(element)+"---\n").catch((err: any) => {
+							console.log(err);
+						});
+
+						// this.app.vault.create(element.references.full+".md", JSON.stringify(element))
+						// if (err) throw err;
+						// console.log('Saved!');
+						// }
+						// );
+
+					});
 					const mr = response.find((mr: GitlabMergeRequests) => {
 						return mr.references.full == my_ref
 					})
