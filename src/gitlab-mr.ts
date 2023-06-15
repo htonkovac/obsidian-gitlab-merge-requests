@@ -75,7 +75,7 @@
 //     "approvals_before_merge": null
 // },
 
-interface GitlabMergeRequests {
+export interface GitlabMergeRequests {
     // The ID of the merge request
     id: number;
     // The ID of the project
@@ -118,5 +118,53 @@ interface GitlabMergeRequests {
     upvotes: number;
     // The number of downvotes
     downvotes: number;
-    // The author of the merge request
+
+    web_url: string;
+    references: {
+        short: string;
+        relative: string;
+        full: string;
+    };
+
+    author: {
+        id: number;
+        username: string;
+        name: string;
+        state: string;
+        avatar_url: string;
+        web_url: string;
+    };
+    
+    
+}
+
+export function customReference(fullRef: string): string {
+    const splitted =  fullRef.split("/");
+    return splitted[splitted.length - 1]
+}
+
+export function getIsDraftClass(isDraft: boolean): string {
+    if (isDraft) {
+        return "-draft"
+    }
+    return ""
+}
+
+export function getText(isDraft: boolean, state: string): string {
+    if (isDraft) {
+        return "Drafted"
+    }
+    if (state === "opened") {
+        return "Opened"
+    }
+    if (state === "closed") {
+        return "Closed"
+    }
+    if (state === "locked") {
+        return "Locked"
+    }
+    if (state === "merged") {
+        return "Merged"
+    }
+    return "Unknown"
 }

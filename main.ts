@@ -1,8 +1,12 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab } from './src/settings';
 import GitlabApi from './src/gitlab-api';
-import GitlabMergeRequests from './src/gitlab-mr';
+import {GitlabMergeRequests} from './src/gitlab-mr';
+import { ViewPluginManager } from './src/inlineIssueViewPlugin'
+
+import {getInlineIssueRenderer} from './src/inline-mr-renderer';
 // Remember to rename these classes and interfaces!
+
 
 // interface MyPluginSettings {
 // 	mySetting: string;
@@ -14,10 +18,17 @@ import GitlabMergeRequests from './src/gitlab-mr';
 
 export default class MyPlugin extends Plugin {
 	settings: GitlabIssuesSettings;
+    private _inlineIssueViewPlugin: ViewPluginManager
 
 	async onload() {
 		await this.loadSettings();
 		//https://github.com/marc0l92/obsidian-jira-issue/blob/e79e82466428a4c338958182f0692bf27db7ef0f/src/rendering/inlineIssueRenderer.ts#L4
+
+		this.registerMarkdownPostProcessor(getInlineIssueRenderer(this.settings))
+        // Live preview inline issue rendering
+        // this._inlineIssueViewPlugin = new ViewPluginManager()
+        // this._inlineIssueViewPlugin.getViewPlugins().forEach(vp => this.registerEditorExtension(vp))
+
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 
