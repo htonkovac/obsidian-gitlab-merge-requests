@@ -93,3 +93,12 @@ If you have multiple URLs, you can also do:
 ## API Documentation
 
 See https://github.com/obsidianmd/obsidian-api
+
+
+
+## Sources which I stole from
+https://marcus.se.net/obsidian-plugin-docs/getting-started/create-your-first-plugin
+
+https://github.com/benr77/obsidian-gitlab-issues
+https://github.com/marc0l92/obsidian-jira-issue
+https://github.com/colineckert/obsidian-things
