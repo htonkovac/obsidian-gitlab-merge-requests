@@ -1,7 +1,7 @@
 // InlineMRRenderer
 import { MarkdownPostProcessorContext } from "obsidian"
 import GitlabApi from "./gitlab-api"
-import { GitlabIssuesSettings } from "./settings"
+import { GitlabIssuesSettings, SettingsData } from "./settings"
 import { GitlabMergeRequests, customReference, getIsDraftClass, getText} from './gitlab-mr'
 
 // import JiraClient from "../client/jiraClient"
@@ -27,7 +27,7 @@ import { GitlabMergeRequests, customReference, getIsDraftClass, getText} from '.
 //     }
 // }
 
-function renderMR(mr: GitlabMergeRequests): HTMLElement {
+export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     // convert to createEl calls
 
     const container = createDiv({ cls: 'gitlab-mr-container' })
@@ -64,7 +64,7 @@ function convertInlineIssuesUrlToTags(el: HTMLElement): void {
     })
 }
 
-export function getInlineIssueRenderer(settings: GitlabIssuesSettings) {
+export function getInlineIssueRenderer() {
     return async (el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
     // console.log({ el })
     // convertInlineIssuesToTags(el)
@@ -79,7 +79,7 @@ export function getInlineIssueRenderer(settings: GitlabIssuesSettings) {
         }
 
         
-        const mr = GitlabApi.getMR(settings, issueKey).then((mr) => {
+        const mr = GitlabApi.getMR(issueKey).then((mr) => {
 
         value.replaceWith(renderMR(mr))
         })

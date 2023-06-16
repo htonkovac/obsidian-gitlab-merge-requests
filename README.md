@@ -98,7 +98,9 @@ See https://github.com/obsidianmd/obsidian-api
 
 ## Sources which I stole from
 https://marcus.se.net/obsidian-plugin-docs/getting-started/create-your-first-plugin
-
+https://marcus.se.net/obsidian-plugin-docs/editor/extensions/decorations
 https://github.com/benr77/obsidian-gitlab-issues
 https://github.com/marc0l92/obsidian-jira-issue
 https://github.com/colineckert/obsidian-things
+
+https://github.com/marc0l92/obsidian-jira-issue/blob/e79e82466428a4c338958182f0692bf27db7ef0f/src/rendering/inlineIssueRenderer.ts#L4

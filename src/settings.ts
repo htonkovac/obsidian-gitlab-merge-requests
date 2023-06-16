@@ -23,6 +23,7 @@ export const DEFAULT_SETTINGS: GitlabIssuesSettings = {
 	}
 };
 
+export let SettingsData: GitlabIssuesSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); //modified in main.ts
 export class GitlabIssuesSettingTab extends PluginSettingTab {
 	plugin: GitlabIssuesPlugin;
 

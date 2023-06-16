@@ -1,5 +1,5 @@
 import { requestUrl, RequestUrlParam, RequestUrlResponse } from 'obsidian';
-import { GitlabIssuesSettings } from './settings';
+import { SettingsData } from './settings';
 import { GitlabMergeRequests } from './gitlab-mr'
 const ms = require('ms')
 
@@ -44,22 +44,22 @@ export default class GitlabApi {
 			});
 	}
 
-	static async getAllMRs(settings: GitlabIssuesSettings): Promise<Array<GitlabMergeRequests>> {
+	static async getAllMRs(): Promise<Array<GitlabMergeRequests>> {
 		const date = new Date();
 		date.setDate(date.getDate() - 30);
 
-		const url = `${settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
+		const url = `${SettingsData.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
 		console.log('calling gitlab api to fetch MRs')
-		const mrs = this.load<Array<GitlabMergeRequests>>(url, settings.gitlabToken)
+		const mrs = this.load<Array<GitlabMergeRequests>>(url, SettingsData.gitlabToken)
 
 		this.cache.setCache(mrs)
 		return mrs
 	}
 
-	static async getMR(settings: GitlabIssuesSettings, mrId: string): Promise<GitlabMergeRequests> {
+	static async getMR( mrId: string): Promise<GitlabMergeRequests> {
 		let all_mrs_promise = this.cache.getCache()
 		if (all_mrs_promise == null) {
-			all_mrs_promise = this.getAllMRs(settings)
+			all_mrs_promise = this.getAllMRs()
 		}
 		const all_mrs = await all_mrs_promise
 		const mr = all_mrs.find((mr: GitlabMergeRequests) => {

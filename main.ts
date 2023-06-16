@@ -1,9 +1,9 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab } from './src/settings';
+import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab, SettingsData } from './src/settings';
 import GitlabApi from './src/gitlab-api';
 import {GitlabMergeRequests} from './src/gitlab-mr';
-import { ViewPluginManager } from './src/inlineIssueViewPlugin'
 
+import {examplePlugin} from './src/view-plugin';
 import {getInlineIssueRenderer} from './src/inline-mr-renderer';
 // Remember to rename these classes and interfaces!
 
@@ -18,13 +18,12 @@ import {getInlineIssueRenderer} from './src/inline-mr-renderer';
 
 export default class MyPlugin extends Plugin {
 	settings: GitlabIssuesSettings;
-    private _inlineIssueViewPlugin: ViewPluginManager
+    // private _inlineIssueViewPlugin: ViewPluginManager
 
 	async onload() {
 		await this.loadSettings();
-		//https://github.com/marc0l92/obsidian-jira-issue/blob/e79e82466428a4c338958182f0692bf27db7ef0f/src/rendering/inlineIssueRenderer.ts#L4
-
-		this.registerMarkdownPostProcessor(getInlineIssueRenderer(this.settings))
+		this.registerEditorExtension(examplePlugin);
+		this.registerMarkdownPostProcessor(getInlineIssueRenderer())
         // Live preview inline issue rendering
         // this._inlineIssueViewPlugin = new ViewPluginManager()
         // this._inlineIssueViewPlugin.getViewPlugins().forEach(vp => this.registerEditorExtension(vp))
@@ -38,8 +37,6 @@ export default class MyPlugin extends Plugin {
 
 			const url = `${this.settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
 			GitlabApi.load<Array<GitlabMergeRequests>>(url, this.settings.gitlabToken)
-			// GitlabApi.load<Array<GitlabMergeRequests>>(url, this.settings.gitlabToken)
-				// .then((response: Array<GitlabMergeRequests>) => {
 				.then((response: Array<GitlabMergeRequests>) => {
 					const my_ref = "htonkovac/test-project-123!2"
 					console.log(url);
@@ -53,12 +50,9 @@ export default class MyPlugin extends Plugin {
 					const mr = response.find((mr: GitlabMergeRequests) => {
 						return mr.references.full == my_ref
 					})
-
-					new Notice(mr.references.full +" "+mr.state );
-					// URL, Has conflicts, pipeline
-					// "has_conflicts": true,
-					// "blocking_discussions_resolved": true,
-
+					if(mr != undefined) {
+						new Notice(mr.references.full +" "+mr.state );
+					}
 					console.log(response);
 				})
 				.catch((error: any) => {
@@ -133,6 +127,8 @@ export default class MyPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		Object.assign(SettingsData, DEFAULT_SETTINGS, await this.loadData())
+
 	}
 
 	async saveSettings() {
