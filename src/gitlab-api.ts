@@ -4,19 +4,22 @@ import { GitlabMergeRequests } from './gitlab-mr'
 const ms = require('ms')
 
 class Cache {
-	cache: Array<GitlabMergeRequests> = []
+	//Interesting learning - in async programming you have to cache the promise, not the result
+	//https://medium.com/@hayavuk/global-async-cache-44bc282cb7df
+	cache: Promise<Array<GitlabMergeRequests>> | null = null
 	cacheUpdateTime: number = 0
 
-	setCache(mrs: Array<GitlabMergeRequests>) {
+	setCache(mrs: Promise<Array<GitlabMergeRequests>>) {
 		this.cache = mrs
 		this.cacheUpdateTime = Date.now()
 	}
 
-	getCache(): Array<GitlabMergeRequests> | null{
-		if (this.cacheUpdateTime + ms('3000') < Date.now()) {
+	getCache(): Promise<Array<GitlabMergeRequests>> | null{
+		if (this.cacheUpdateTime + ms('3000000') < Date.now()) {
+			console.log('cache miss')
 			return null
 		}
-
+		console.log('cache hit')
 		return this.cache
 	}
 }
@@ -46,18 +49,19 @@ export default class GitlabApi {
 		date.setDate(date.getDate() - 30);
 
 		const url = `${settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
-		const mrs = await this.load<Array<GitlabMergeRequests>>(url, settings.gitlabToken)
+		console.log('calling gitlab api to fetch MRs')
+		const mrs = this.load<Array<GitlabMergeRequests>>(url, settings.gitlabToken)
 
 		this.cache.setCache(mrs)
 		return mrs
 	}
 
 	static async getMR(settings: GitlabIssuesSettings, mrId: string): Promise<GitlabMergeRequests> {
-		let all_mrs = this.cache.getCache()
-		if (all_mrs == null) {
-			all_mrs = await this.getAllMRs(settings)
+		let all_mrs_promise = this.cache.getCache()
+		if (all_mrs_promise == null) {
+			all_mrs_promise = this.getAllMRs(settings)
 		}
-
+		const all_mrs = await all_mrs_promise
 		const mr = all_mrs.find((mr: GitlabMergeRequests) => {
 			return mr.references.full == mrId
 		}
