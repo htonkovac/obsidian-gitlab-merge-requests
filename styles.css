@@ -266,26 +266,7 @@ ji-inline-issue jira-issue-container
     animation-duration: 2s;
 }
 
-@keyframes rotate-keyframes {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
 
 .jira-issue-container .icon-link:hover {
     text-decoration: none;
 }
-
-svg.svg-icon.visible {
-    stroke: none;
-    fill: currentColor;
-}
-
-svg.svg-icon.hidden {
-    stroke: none;
-    fill: currentColor;
-} */
