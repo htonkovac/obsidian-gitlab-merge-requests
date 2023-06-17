@@ -26,7 +26,7 @@ class InlineIssueWidget extends WidgetType {
         super()
         this.mrID = mrID
 
-        this._htmlContainer = createSpan({ cls: 'ji-inline-issue jira-issue-container' })
+        this._htmlContainer = createDiv({ cls: 'ji-inline-issue jira-issue-container' })
         this.buildTag()
     }
 
