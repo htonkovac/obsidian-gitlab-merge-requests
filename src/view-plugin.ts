@@ -9,17 +9,16 @@ import {
     MatchDecorator,
     WidgetType,
 } from "@codemirror/view";
-import { RangeSetBuilder } from "@codemirror/state";
+
+import { RangeSet, StateField } from "@codemirror/state"
+
 import GitlabApi from "./gitlab-api"
+import { editorLivePreviewField } from "obsidian"
 
 import { renderMR } from './inline-mr-renderer';
-import { GitlabIssuesSettings, DEFAULT_SETTINGS } from "./settings"; //FIXME: import actual settings
-import { match } from "assert";
 
 
 class InlineIssueWidget extends WidgetType {
-
-
     private mrID: string
     private _htmlContainer: HTMLElement
     constructor(mrID: string) {
@@ -41,6 +40,17 @@ class InlineIssueWidget extends WidgetType {
     toDOM(view: EditorView): HTMLElement {
         return this._htmlContainer
     }
+}
+
+const isEditorInLivePreviewMode = (view: EditorView) => view.state.field(editorLivePreviewField as unknown as StateField<boolean>)
+const isCursorInsideTag = (view: EditorView, start: number, length: number) => {
+    const cursor = view.state.selection.main.head
+    return (cursor > start - 1 && cursor < start + length + 1)
+}
+const isSelectionContainsTag = (view: EditorView, start: number, length: number) => {
+    const selectionBegin = view.state.selection.main.from
+    const selectionEnd = view.state.selection.main.to
+    return (selectionEnd > start - 1 && selectionBegin < start + length + 1)
 }
 
 class ExamplePlugin implements PluginValue {
@@ -79,20 +89,16 @@ class ExamplePlugin implements PluginValue {
                 console.log("MATCHY")
                 console.log(match)
                 const mrId = match[1] + "!" + match[2]
-                return Decoration.replace({
-                    widget: new InlineIssueWidget(mrId),
-                })
-
+                const tagLength = match[0].length
+                //FIXME: this is not working
                 // if (!isEditorInLivePreviewMode(view) || isCursorInsideTag(view, pos, tagLength) || isSelectionContainsTag(view, pos, tagLength)) {
                 //     return Decoration.mark({
                 //         tagName: 'div',
                 //         class: 'HyperMD-codeblock HyperMD-codeblock-bg gitlab-merge-request-inline-mark',
-                //     })
-                // } else {
-                //     return Decoration.replace({
-                //         widget: new InlineIssueWidget(key, compact, host),
-                //     })
-                // }
+                //     })}
+                return Decoration.replace({
+                    widget: new InlineIssueWidget(mrId),
+                })
             }
         })
 

@@ -118,6 +118,11 @@ export interface GitlabMergeRequests {
     upvotes: number;
     // The number of downvotes
     downvotes: number;
+    detailed_merge_status: string;
+
+
+    approved_by: string;
+    approved: boolean;
 
     web_url: string;
     references: {
@@ -150,21 +155,58 @@ export function getIsDraftClass(isDraft: boolean): string {
     return ""
 }
 
-export function getText(isDraft: boolean, state: string): string {
-    if (isDraft) {
+export function getText(mr: GitlabMergeRequests): string {
+    if (mr.has_conflicts) { 
+        return "Conflict"
+    }
+    if (mr.draft) {
         return "Drafted"
     }
-    if (state === "opened") {
+    if (mr.detailed_merge_status === "mergeable") {
+        return "Ready!"
+    }
+    if (mr.approved) { //lol doesn't work - is not part of the api
+        return "Approved"
+    }
+    if (mr.state === "opened") {
         return "Opened"
     }
-    if (state === "closed") {
+    if (mr.state === "closed") {
         return "Closed"
     }
-    if (state === "locked") {
+    if (mr.state === "locked") {
         return "Locked"
     }
-    if (state === "merged") {
+    if (mr.state === "merged") {
         return "Merged"
     }
     return "Unknown"
 }
+
+export function getState(mr: GitlabMergeRequests): string {
+    if (mr.has_conflicts) { 
+        return "conflicts"
+    }
+    if (mr.draft) {
+        return "draft"
+    }
+    if (mr.approved) {
+        return "approved"
+    }
+    if (mr.detailed_merge_status === "mergeable") {
+        return "mergeable"
+    }
+    if (mr.state === "opened") {
+        return "opened"
+    }
+    if (mr.state === "closed") {
+        return "closed"
+    }
+    if (mr.state === "locked") {
+        return "locked"
+    }
+    if (mr.state === "merged") {
+        return "merged"
+    }
+    return "unknown"
+}   

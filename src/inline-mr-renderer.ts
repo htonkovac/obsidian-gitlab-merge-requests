@@ -2,7 +2,7 @@
 import { MarkdownPostProcessorContext } from "obsidian"
 import GitlabApi from "./gitlab-api"
 import { GitlabIssuesSettings, SettingsData } from "./settings"
-import { GitlabMergeRequests, customReference, getIsDraftClass, getText } from './gitlab-mr'
+import { GitlabMergeRequests, customReference, getState, getText } from './gitlab-mr'
 
 // import JiraClient from "../client/jiraClient"
 // import { IJiraIssue } from "../interfaces/issueInterfaces"
@@ -33,7 +33,7 @@ export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     const container = createDiv({ cls: 'gitlab-mr-container' })
     const mrLink = createEl('a', { cls: 'gitlab-mr-link', attr: { href: mr.web_url, target: '_blank' } })
     // mrLink.appendChild(createEl('input',{ cls: 'merged', attr: { type: 'checkbox' } }))
-    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state-indicator gitlab-mr-state-' + mr.state + getIsDraftClass(mr.draft), text: getText(mr.draft, mr.state) }))
+    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state-indicator gitlab-mr-state-'+getState(mr), text: getText(mr)}))
     mrLink.appendChild(createSpan({ cls: 'gitlab-mr-id gitlab-mr-text', text: customReference(mr.references.full) }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state', text: mr.state }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-author', text: mr.author.name }))

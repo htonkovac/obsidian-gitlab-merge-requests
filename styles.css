@@ -41,7 +41,7 @@ If your plugin does not need CSS, delete this file.
     color: #3f2b5b;
 }
 
-.gitlab-mr-state-opened-draft {
+.gitlab-mr-state-draft {
     background-color: #e8e8e8;
     color: #6e6e6e;
 }
@@ -50,7 +50,20 @@ If your plugin does not need CSS, delete this file.
     background-color: #f8d7da;
     color: #721c24;
 }
+.gitlab-mr-state-mergeable {
+    background-color: #c3e6cd;
+    color: #24663b;
+}
 
+.gitlab-mr-state-approved {
+    background-color: #c3e6cd;
+    color: #24663b;
+}
+
+.gitlab-mr-state-conflicts {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 
 .gitlab-mr-link a:hover,
 a:visited,

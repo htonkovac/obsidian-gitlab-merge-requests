@@ -35,7 +35,7 @@ export default class MyPlugin extends Plugin {
 			const date = new Date();
 			date.setDate(date.getDate() - 30);
 
-			const url = `${this.settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
+			const url = `${this.settings.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}&merge_status_recheck=true`;
 			GitlabApi.load<Array<GitlabMergeRequests>>(url, this.settings.gitlabToken)
 				.then((response: Array<GitlabMergeRequests>) => {
 					const my_ref = "htonkovac/test-project-123!2"
