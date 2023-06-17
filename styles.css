@@ -212,60 +212,6 @@ ji-inline-issue jira-issue-container
     text-decoration: line-through;
 }
 
-.jira-issue-container span.pull-request-tag {
-    padding: 1px 3px;
-    line-height: 1.5;
-    padding: 0.2em 0.75em;
-    font-size: 0.75em;
-}
-
-.jira-issue-container span.pull-request-tag:last-child {
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-
-}
-
-.jira-issue-container span.pull-request-tag:first-child {
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-}
-
-.jira-issue-container span.pull-request-open.is-light {
-    background-color: #97AFD8;
-}
-
-.jira-issue-container span.pull-request-merged.is-light {
-    background-color: #96E773;
-}
-
-.jira-issue-container span.pull-request-delete.is-light {
-    background-color: #D39C9E;
-}
-
-.jira-issue-container span.pull-request-open.is-dark {
-    background-color: #325186;
-}
-
-.jira-issue-container span.pull-request-merged.is-dark {
-    background-color: #25570F;
-}
-
-.jira-issue-container span.pull-request-delete.is-dark {
-    background-color: #984447;
-}
-
-.jira-issue-container .pull-request-tag>svg {
-    height: 1em;
-    width: 1em;
-    stroke: none;
-    fill: currentColor;
-}
-
-.jira-issue-container .rotate-animation {
-    animation-name: rotate-keyframes;
-    animation-duration: 2s;
-}
-
 
 .jira-issue-container .icon-link:hover {
     text-decoration: none;
