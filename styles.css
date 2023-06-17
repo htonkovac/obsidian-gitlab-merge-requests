@@ -68,7 +68,7 @@ If your plugin does not need CSS, delete this file.
 ji-inline-issue jira-issue-container
  */
 
- .jira-issue-container {
+.jira-issue-container {
     display: flex;
     align-items: flex-start;
     position: relative;
@@ -129,11 +129,6 @@ ji-inline-issue jira-issue-container
     height: auto;
     max-height: 16px;
 }
-
-.HyperMD-task-line[data-task="x"] .ji-inline-issue.jira-issue-container {
-    text-decoration: line-through;
-}
-
 
 .jira-issue-container .icon-link:hover {
     text-decoration: none;
