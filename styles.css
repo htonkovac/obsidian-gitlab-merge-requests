@@ -151,18 +151,6 @@ ji-inline-issue jira-issue-container
     padding: 0.1em 0.3em;
 }
 
-/* Settings */
-.setting-item-control select.flex-grow-1 {
-    flex-grow: 1;
-    max-width: none;
-}
-
-.setting-item-control input[type="text"].custom-field-text {
-    margin-left: 10px;
-    height: 2.5em;
-    border-radius: 8px;
-}
-
 .jira-issue-container .letter-height {
     height: auto;
     max-height: 1em;
@@ -173,39 +161,6 @@ ji-inline-issue jira-issue-container
     max-width: 16px;
     height: auto;
     max-height: 16px;
-}
-
-.jira-issue-suggestion {
-    font-size: small;
-    margin-right: 5px;
-}
-
-.jira-issue-suggestion:last-child {
-    margin-right: 0;
-}
-
-.jira-issue-suggestion.is-compact {
-    color: green;
-}
-
-.jira-issue-suggestion.is-custom-field {
-    color: orange;
-}
-
-.jira-issue-suggestion.is-function {
-    color: red;
-}
-
-.jira-issue-inline-mark {
-    display: inline-block;
-    padding: 2px 5px;
-}
-
-.ji-inline-issue.jira-issue-container .ji-band,
-.jira-issue-container .ji-band {
-    width: 3px;
-    min-width: 3px;
-    padding: 0;
 }
 
 .HyperMD-task-line[data-task="x"] .ji-inline-issue.jira-issue-container {
