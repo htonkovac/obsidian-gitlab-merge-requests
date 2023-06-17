@@ -52,23 +52,26 @@ If your plugin does not need CSS, delete this file.
 }
 
 
-.gitlab-mr-link a:hover, a:visited, a:link, a:active
-{
+.gitlab-mr-link a:hover,
+a:visited,
+a:link,
+a:active {
     text-decoration: none;
 }
 
-.gitlab-mr-container span{
+.gitlab-mr-container span {
     margin: 3px;
 }
 
 .gitlab-mr-text {
     color: orange
 }
+
 /* 
-ji-inline-issue jira-issue-container
+gitlab-inline-merge-request gitlab-merge-request-container
  */
 
-.jira-issue-container {
+.gitlab-merge-request-container {
     display: flex;
     align-items: flex-start;
     position: relative;
@@ -79,57 +82,57 @@ ji-inline-issue jira-issue-container
 }
 
 /* Generic */
-.jira-issue-container a {
+.gitlab-merge-request-container a {
     cursor: pointer;
     text-decoration: none;
 }
 
-.jira-issue-container img.fit-content {
+.gitlab-merge-request-container img.fit-content {
     height: 16px;
     width: 16px;
 }
 
-.jira-issue-container img.fit-content {
+.gitlab-merge-request-container img.fit-content {
     max-width: fit-content;
     width: fit-content;
 }
 
-.jira-issue-container .no-wrap {
+.gitlab-merge-request-container .no-wrap {
     flex-grow: 0;
     flex-shrink: 0;
     white-space: nowrap;
 }
 
-.jira-issue-container .issue-summary {
+.gitlab-merge-request-container .issue-summary {
     flex-grow: 1;
 }
 
-.jira-issue-container a:hover {
+.gitlab-merge-request-container a:hover {
     text-decoration: underline;
 }
 
 /* Inline Issues */
-.jira-issue-container.ji-inline-issue {
+.gitlab-merge-request-container.gitlab-inline-merge-request {
     display: inline-block;
     margin: 0;
 }
 
-.jira-issue-container.ji-inline-issue .ji-tag {
+.gitlab-merge-request-container.gitlab-inline-merge-request .ji-tag {
     padding: 0.1em 0.3em;
 }
 
-.jira-issue-container .letter-height {
+.gitlab-merge-request-container .letter-height {
     height: auto;
     max-height: 1em;
 }
 
-.jira-issue-container img.avatar-image {
+.gitlab-merge-request-container img.avatar-image {
     width: 100%;
     max-width: 16px;
     height: auto;
     max-height: 16px;
 }
 
-.jira-issue-container .icon-link:hover {
+.gitlab-merge-request-container .icon-link:hover {
     text-decoration: none;
 }

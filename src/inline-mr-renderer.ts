@@ -2,7 +2,7 @@
 import { MarkdownPostProcessorContext } from "obsidian"
 import GitlabApi from "./gitlab-api"
 import { GitlabIssuesSettings, SettingsData } from "./settings"
-import { GitlabMergeRequests, customReference, getIsDraftClass, getText} from './gitlab-mr'
+import { GitlabMergeRequests, customReference, getIsDraftClass, getText } from './gitlab-mr'
 
 // import JiraClient from "../client/jiraClient"
 // import { IJiraIssue } from "../interfaces/issueInterfaces"
@@ -20,7 +20,7 @@ import { GitlabMergeRequests, customReference, getIsDraftClass, getText} from '.
 //             // console.log({ match })
 //             const compact = !!match[1]
 //             const issueKey = match[2]
-//             const container = createSpan({ cls: 'ji-inline-issue jira-issue-container', attr: { 'data-issue-key': issueKey, 'data-compact': compact } })
+//             const container = createSpan({ cls: 'gitlab-inline-merge-request gitlab-merge-request-container', attr: { 'data-issue-key': issueKey, 'data-compact': compact } })
 //             container.appendChild(RC.renderLoadingItem(issueKey, true))
 //             el.innerHTML = el.innerHTML.replace(match[0], container.outerHTML)
 //         }
@@ -33,7 +33,7 @@ export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     const container = createDiv({ cls: 'gitlab-mr-container' })
     const mrLink = createEl('a', { cls: 'gitlab-mr-link', attr: { href: mr.web_url, target: '_blank' } })
     // mrLink.appendChild(createEl('input',{ cls: 'merged', attr: { type: 'checkbox' } }))
-    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state-indicator gitlab-mr-state-'+mr.state+getIsDraftClass(mr.draft), text: getText(mr.draft, mr.state) }))
+    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state-indicator gitlab-mr-state-' + mr.state + getIsDraftClass(mr.draft), text: getText(mr.draft, mr.state) }))
     mrLink.appendChild(createSpan({ cls: 'gitlab-mr-id gitlab-mr-text', text: customReference(mr.references.full) }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state', text: mr.state }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-author', text: mr.author.name }))
@@ -54,36 +54,36 @@ function convertInlineIssuesUrlToTags(el: HTMLElement): void {
 
     //FIXME sometimes may not be a MR link
     MRUrlElements.forEach((mrUrlElement: HTMLAnchorElement) => {
-        
+
         const path = mrUrlElement.href.split("gitlab.com/")[1]
         // extract MR ID from URL
         const splitted_path = path.split("/-/merge_requests/")
-        const mrKey = splitted_path[0] + "!"  + splitted_path[1]
-        const container = createSpan({ cls: 'gitlab-mr', attr: { 'mr-key': mrKey} })
+        const mrKey = splitted_path[0] + "!" + splitted_path[1]
+        const container = createSpan({ cls: 'gitlab-mr', attr: { 'mr-key': mrKey } })
         mrUrlElement.replaceWith(container)
     })
 }
 
 export function getInlineIssueRenderer() {
     return async (el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
-    // console.log({ el })
-    // convertInlineIssuesToTags(el)
-    convertInlineIssuesUrlToTags(el)
+        // console.log({ el })
+        // convertInlineIssuesToTags(el)
+        convertInlineIssuesUrlToTags(el)
 
-    const inlineIssueTags: NodeListOf<HTMLSpanElement> = el.querySelectorAll(`span.gitlab-mr`)
-    inlineIssueTags.forEach((value: HTMLSpanElement) => {
-        const issueKey = value.getAttribute('mr-key')
-        if (issueKey == null) {
-            console.log("issueKey is null")
-            throw new Error("issueKey is null")
-        }
+        const inlineIssueTags: NodeListOf<HTMLSpanElement> = el.querySelectorAll(`span.gitlab-mr`)
+        inlineIssueTags.forEach((value: HTMLSpanElement) => {
+            const issueKey = value.getAttribute('mr-key')
+            if (issueKey == null) {
+                console.log("issueKey is null")
+                throw new Error("issueKey is null")
+            }
 
-        
-        const mr = GitlabApi.getMR(issueKey).then((mr) => {
 
-        value.replaceWith(renderMR(mr))
-        })
-        //TODO: add cache
+            const mr = GitlabApi.getMR(issueKey).then((mr) => {
+
+                value.replaceWith(renderMR(mr))
+            })
+            //TODO: add cache
 
 
             // JiraClient.getIssue(issueKey).(newIssue => {
@@ -94,6 +94,6 @@ export function getInlineIssueRenderer() {
             //     value.replaceChildren(RC.renderIssueError(issueKey, err))
             // })
         }
-    )
-}
+        )
+    }
 }

@@ -26,7 +26,7 @@ class InlineIssueWidget extends WidgetType {
         super()
         this.mrID = mrID
 
-        this._htmlContainer = createDiv({ cls: 'ji-inline-issue jira-issue-container' })
+        this._htmlContainer = createDiv({ cls: 'gitlab-inline-merge-request gitlab-merge-request-container' })
         this.buildTag()
     }
 
@@ -86,7 +86,7 @@ class ExamplePlugin implements PluginValue {
                 // if (!isEditorInLivePreviewMode(view) || isCursorInsideTag(view, pos, tagLength) || isSelectionContainsTag(view, pos, tagLength)) {
                 //     return Decoration.mark({
                 //         tagName: 'div',
-                //         class: 'HyperMD-codeblock HyperMD-codeblock-bg jira-issue-inline-mark',
+                //         class: 'HyperMD-codeblock HyperMD-codeblock-bg gitlab-merge-request-inline-mark',
                 //     })
                 // } else {
                 //     return Decoration.replace({
