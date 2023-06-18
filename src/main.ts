@@ -1,5 +1,5 @@
 import { App, Modal, Plugin } from 'obsidian';
-import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab, SettingsData } from './settings';
+import { DEFAULT_SETTINGS, GitlabIssuesSettings, GitlabIssuesSettingTab, SettingsData , updateSettings} from './settings';
 
 import {examplePlugin} from './view-plugin';
 import {getInlineIssueRenderer} from './inline-mr-renderer';
@@ -24,8 +24,11 @@ export default class MyPlugin extends Plugin {
 	}
 
 	async loadSettings() {
+		console.log(await this.loadData())
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-		Object.assign(SettingsData, DEFAULT_SETTINGS, await this.loadData())
+		updateSettings(this.settings);
+		// SettingsData = this.settings;
+		// console.log(SettingsData)
 
 	}
 

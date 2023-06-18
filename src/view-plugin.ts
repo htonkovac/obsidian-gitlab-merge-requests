@@ -9,6 +9,7 @@ import {
     MatchDecorator,
     WidgetType,
 } from "@codemirror/view";
+import {SettingsData} from './settings'
 
 import { StateField } from "@codemirror/state"
 // import settings
@@ -66,7 +67,7 @@ class ExamplePlugin implements PluginValue {
     }
     buildDecorations(view: EditorView): DecorationSet {
 
-        const gitlabUrl = "https://gitlab.com"
+        const gitlabUrl = SettingsData.gitlabUrl
 
         const matchDeco = new MatchDecorator({
             regexp: new RegExp(`${gitlabUrl}/(.*)/-/merge_requests/([0-9]+)[/#]?.*\w?`, 'g'),

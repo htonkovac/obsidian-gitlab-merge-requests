@@ -12,7 +12,7 @@ export interface GitlabIssuesSettings {
 }
 
 export const DEFAULT_SETTINGS: GitlabIssuesSettings = {
-	gitlabUrl: 'https://gitlab.com',
+	gitlabUrl: 'https://gitlb.com',
 	gitlabToken: '',
 	templateFile: '',
 	outputDir: '/Gitlab Issues/',
@@ -22,6 +22,10 @@ export const DEFAULT_SETTINGS: GitlabIssuesSettings = {
 		return `${this.gitlabUrl}/api/v4`;
 	}
 };
+
+export function updateSettings(settings: GitlabIssuesSettings) {
+	SettingsData = settings;
+}
 
 export let SettingsData: GitlabIssuesSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); //modified in main.ts
 export class GitlabIssuesSettingTab extends PluginSettingTab {
