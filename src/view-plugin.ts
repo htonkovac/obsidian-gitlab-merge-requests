@@ -11,6 +11,7 @@ import {
 } from "@codemirror/view";
 
 import { StateField } from "@codemirror/state"
+// import settings
 
 import GitlabApi from "./gitlab-api"
 import { editorLivePreviewField } from "obsidian"

@@ -2,6 +2,7 @@
 import { MarkdownPostProcessorContext } from "obsidian"
 import GitlabApi from "./gitlab-api"
 import { GitlabMergeRequests, customReference, getState, getText } from './gitlab-mr'
+import { SettingsData } from './settings';
 
 export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     // convert to createEl calls
@@ -21,7 +22,9 @@ export function renderMR(mr: GitlabMergeRequests): HTMLElement {
 }
 
 function convertInlineIssuesUrlToTags(el: HTMLElement): void {
-    const gitlabUrl = "https://gitlab.com"
+    //read gitlab url from settings
+
+    const gitlabUrl = SettingsData.gitlabUrl
 
     // mrUrl = "https://gitlab.com/htonkovac/test-project-123/-/merge_requests/2"
     // mrUrl2 = "https://gitlab.com/test-group334183924/thesubgroup/awesome-project/-/merge_requests/1"
@@ -31,7 +34,7 @@ function convertInlineIssuesUrlToTags(el: HTMLElement): void {
     //FIXME sometimes may not be a MR link
     MRUrlElements.forEach((mrUrlElement: HTMLAnchorElement) => {
 
-        const path = mrUrlElement.href.split("gitlab.com/")[1]
+        const path = mrUrlElement.href.split(gitlabUrl)[1]
         // extract MR ID from URL
         const splitted_path = path.split("/-/merge_requests/")
         const mrKey = splitted_path[0] + "!" + splitted_path[1]
