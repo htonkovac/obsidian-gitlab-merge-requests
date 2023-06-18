@@ -10,7 +10,7 @@ import {
     WidgetType,
 } from "@codemirror/view";
 
-import { RangeSet, StateField } from "@codemirror/state"
+import { StateField } from "@codemirror/state"
 
 import GitlabApi from "./gitlab-api"
 import { editorLivePreviewField } from "obsidian"
@@ -45,12 +45,9 @@ class InlineIssueWidget extends WidgetType {
 const isEditorInLivePreviewMode = (view: EditorView) => view.state.field(editorLivePreviewField as unknown as StateField<boolean>)
 const isCursorInsideTag = (view: EditorView, start: number, length: number) => {
     const cursor = view.state.selection.main.head
-    return (cursor > start - 1 && cursor < start + length + 1)
-}
-const isSelectionContainsTag = (view: EditorView, start: number, length: number) => {
-    const selectionBegin = view.state.selection.main.from
-    const selectionEnd = view.state.selection.main.to
-    return (selectionEnd > start - 1 && selectionBegin < start + length + 1)
+
+    const res = (cursor > start - 1 && cursor < start + length + 1)
+    return res
 }
 
 class ExamplePlugin implements PluginValue {
@@ -61,41 +58,27 @@ class ExamplePlugin implements PluginValue {
     }
 
     update(update: ViewUpdate) {
-        if (update.docChanged || update.viewportChanged) {
-            console.log('docChanged or viewportChanged')
+        if (update.docChanged || update.startState.selection.main !== update.state.selection.main) {
             this.decorations = this.buildDecorations(update.view);
         }
 
-        // console.log(update.changes)
-        // if (update.docChanged) {
-        //     console.log('docChanged')
-        // }
-        // else if (update.viewportChanged) {
-        //     console.log('viewportChanged')
-        // } else {
-        //     console.log('other')
-        // }
-
-
     }
     buildDecorations(view: EditorView): DecorationSet {
-        console.log('buildDecorations')
 
         const gitlabUrl = "https://gitlab.com"
 
         const matchDeco = new MatchDecorator({
-            regexp: new RegExp(`${gitlabUrl}/(.*)/-/merge_requests/([0-9]+)`, 'g'),
+            regexp: new RegExp(`${gitlabUrl}/(.*)/-/merge_requests/([0-9]+)[/#]?.*\w?`, 'g'),
             decoration: (match: RegExpExecArray, view: EditorView, pos: number) => {
-                console.log("MATCHY")
-                console.log(match)
                 const mrId = match[1] + "!" + match[2]
                 const tagLength = match[0].length
-                //FIXME: this is not working
-                // if (!isEditorInLivePreviewMode(view) || isCursorInsideTag(view, pos, tagLength) || isSelectionContainsTag(view, pos, tagLength)) {
-                //     return Decoration.mark({
-                //         tagName: 'div',
-                //         class: 'HyperMD-codeblock HyperMD-codeblock-bg gitlab-merge-request-inline-mark',
-                //     })}
+
+                if (!isEditorInLivePreviewMode(view) || isCursorInsideTag(view, pos, tagLength)) {
+                    return Decoration.mark({
+                        tagName: 'div',
+                        class: 'gitlab-merge-request-inline-mark',
+                    })
+                }
                 return Decoration.replace({
                     widget: new InlineIssueWidget(mrId),
                 })

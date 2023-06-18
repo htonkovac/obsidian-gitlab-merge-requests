@@ -16,10 +16,9 @@ class Cache {
 
 	getCache(): Promise<Array<GitlabMergeRequests>> | null{
 		if (this.cacheUpdateTime + ms('3000000') < Date.now()) {
-			console.log('cache miss')
 			return null
 		}
-		console.log('cache hit')
+
 		return this.cache
 	}
 }
@@ -49,7 +48,6 @@ export default class GitlabApi {
 		date.setDate(date.getDate() - 30);
 
 		const url = `${SettingsData.gitlabUrl}/api/v4/merge_requests?created_after=${date.toISOString()}`;
-		console.log('calling gitlab api to fetch MRs')
 		const mrs = this.load<Array<GitlabMergeRequests>>(url, SettingsData.gitlabToken)
 
 		this.cache.setCache(mrs)

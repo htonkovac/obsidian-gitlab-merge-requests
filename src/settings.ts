@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting, normalizePath } from "obsidian";
-import GitlabIssuesPlugin from "../main";
+import GitlabIssuesPlugin from "./main";
 
 export interface GitlabIssuesSettings {
 	gitlabUrl: string;
@@ -61,40 +61,6 @@ export class GitlabIssuesSettingTab extends PluginSettingTab {
 					this.plugin.onload().then(
 						() => console.log('Gitlab Issues: Reloading plugin')
 					);
-				}));
-
-		new Setting(containerEl)
-			.setName('Template File')
-			.setDesc('Path to an Obsidian note to use as the template.')
-			.addText(text => text
-				.setPlaceholder('your-template-file.md')
-				.setValue(this.plugin.settings.templateFile)
-				.onChange(async (value) => {
-					this.plugin.settings.templateFile = value;
-					await this.plugin.saveSettings();
-				}));
-
-		new Setting(containerEl)
-			.setName('Output Folder')
-			.setDesc('Path to an Obsidian folder to write output files to.')
-			.addText(text => text
-				.setPlaceholder('/Gitlab Issues/')
-				.setValue(normalizePath(this.plugin.settings.outputDir))
-				.onChange(async (value) => {
-					value = normalizePath(value);
-					this.plugin.settings.outputDir = value;
-					await this.plugin.saveSettings();
-				}));
-
-		new Setting(containerEl)
-			.setName('Issues Filter')
-			.setDesc('The query string used to filter the issues.')
-			.addText(text => text
-				.setPlaceholder('due_date=month')
-				.setValue(this.plugin.settings.filter)
-				.onChange(async (value) => {
-					this.plugin.settings.filter = value;
-					await this.plugin.saveSettings();
 				}));
 
 		new Setting(containerEl)
