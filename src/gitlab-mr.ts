@@ -68,6 +68,9 @@ export interface GitlabMergeRequests {
         web_url: string;
     };
 
+    blocking_discussions_resolved: boolean;
+
+
 
 }
 
@@ -84,6 +87,10 @@ export function getIsDraftClass(isDraft: boolean): string {
 }
 
 export function getText(mr: GitlabMergeRequests): string {
+    if (mr.state === "merged") {
+        return "Merged"
+    }
+
     if (mr.has_conflicts) {
         return "Conflict"
     }
@@ -97,7 +104,11 @@ export function getText(mr: GitlabMergeRequests): string {
         return "Drafted"
     }
 
-    if (mr.merge_status === "can_be_merged") {
+    if (!mr.blocking_discussions_resolved) {
+        return "Discuss"
+    }
+
+    if (mr.merge_status === "can_be_merged") { //can_be_merged doesn't account for approvals
         return "Ready!"
     }
     if (mr.approved) { //lol doesn't work - is not part of the api
@@ -112,13 +123,15 @@ export function getText(mr: GitlabMergeRequests): string {
     if (mr.state === "locked") {
         return "Locked"
     }
-    if (mr.state === "merged") {
-        return "Merged"
-    }
+
     return "Unknown"
 }
 
 export function getState(mr: GitlabMergeRequests): string {
+    if (mr.state === "merged") {
+        return "merged"
+    }
+
     if (mr.has_conflicts) {
         return "conflicts"
     }
@@ -126,10 +139,15 @@ export function getState(mr: GitlabMergeRequests): string {
     if (mr.merge_status === "cannot_be_merged" || mr.detailed_merge_status === "cannot_be_merged_recheck" || mr.detailed_merge_status === "cannot_be_merged_recheck_conflicts") { //not sure if cannot_be_merged_recheck_conflicts was hallucinated or really exists 
         return "conflicts"
     }
-    
+
+    if (mr.blocking_discussions_resolved) {
+        return "draft"
+    }
+
     if (mr.draft) {
         return "draft"
     }
+
     if (mr.approved) {
         return "approved"
     }
@@ -145,8 +163,6 @@ export function getState(mr: GitlabMergeRequests): string {
     if (mr.state === "locked") {
         return "locked"
     }
-    if (mr.state === "merged") {
-        return "merged"
-    }
+
     return "unknown"
 }   
