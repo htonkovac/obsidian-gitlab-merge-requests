@@ -1,79 +1,7 @@
 //https://gitlab.com/api/v4/merge_requests
 //https://gitlab.com/api/v4/merge_requests?state=opened&scope=all
 //https://gitlab.com/api/v4/merge_requests?state=opened&scope=all&per_page=100
-
-
-
-/// Gitlab merge requests object 
-// {
-//     "id": 230313686,
-//     "iid": 3,
-//     "project_id": 46835458,
-//     "title": "My new feature",
-//     "description": "",
-//     "state": "opened",
-//     "created_at": "2023-06-13T20:55:23.807Z",
-//     "updated_at": "2023-06-13T20:55:24.383Z",
-//     "merged_by": null,
-//     "merge_user": null,
-//     "merged_at": null,
-//     "closed_by": null,
-//     "closed_at": null,
-//     "target_branch": "main",
-//     "source_branch": "my-new-feature",
-//     "user_notes_count": 0,
-//     "upvotes": 0,
-//     "downvotes": 0,
-//     "author": {
-//         "id": 2446813,
-//         "username": "htonkovac",
-//         "name": "Hrvoje Tonkovac",
-//         "state": "active",
-//         "avatar_url": "https://secure.gravatar.com/avatar/2e7643e5ea797c7d56ce7950bce371a0?s=80\u0026d=identicon",
-//         "web_url": "https://gitlab.com/htonkovac"
-//     },
-//     "assignees": [],
-//     "assignee": null,
-//     "reviewers": [],
-//     "source_project_id": 46835458,
-//     "target_project_id": 46835458,
-//     "labels": [],
-//     "draft": false,
-//     "work_in_progress": false,
-//     "milestone": null,
-//     "merge_when_pipeline_succeeds": false,
-//     "merge_status": "cannot_be_merged",
-//     "detailed_merge_status": "broken_status",
-//     "sha": "1f11489feeaf2223d289f4ef6848ea24573a1ecf",
-//     "merge_commit_sha": null,
-//     "squash_commit_sha": null,
-//     "discussion_locked": null,
-//     "should_remove_source_branch": null,
-//     "force_remove_source_branch": true,
-//     "prepared_at": "2023-06-13T20:55:24.378Z",
-//     "reference": "!3",
-//     "references": {
-//         "short": "!3",
-//         "relative": "!3",
-//         "full": "htonkovac/test-project-123!3"
-//     },
-//     "web_url": "https://gitlab.com/htonkovac/test-project-123/-/merge_requests/3",
-//     "time_stats": {
-//         "time_estimate": 0,
-//         "total_time_spent": 0,
-//         "human_time_estimate": null,
-//         "human_total_time_spent": null
-//     },
-//     "squash": true,
-//     "squash_on_merge": true,
-//     "task_completion_status": {
-//         "count": 0,
-//         "completed_count": 0
-//     },
-//     "has_conflicts": true,
-//     "blocking_discussions_resolved": true,
-//     "approvals_before_merge": null
-// },
+//https://docs.gitlab.com/ee/api/merge_requests.html
 
 export interface GitlabMergeRequests {
     // The ID of the merge request
@@ -139,12 +67,12 @@ export interface GitlabMergeRequests {
         avatar_url: string;
         web_url: string;
     };
-    
-    
+
+
 }
 
 export function customReference(fullRef: string): string {
-    const splitted =  fullRef.split("/");
+    const splitted = fullRef.split("/");
     return splitted[splitted.length - 1]
 }
 
@@ -156,13 +84,20 @@ export function getIsDraftClass(isDraft: boolean): string {
 }
 
 export function getText(mr: GitlabMergeRequests): string {
-    if (mr.has_conflicts) { 
+    if (mr.has_conflicts) {
         return "Conflict"
     }
+
+    // detailed_merege_status is still not available in the api
+    if (mr.merge_status === "cannot_be_merged" || mr.detailed_merge_status === "cannot_be_merged_recheck" || mr.detailed_merge_status === "cannot_be_merged_recheck_conflicts") { //not sure if cannot_be_merged_recheck_conflicts was hallucinated or really exists 
+        return "Failure!"
+    }
+
     if (mr.draft) {
         return "Drafted"
     }
-    if (mr.detailed_merge_status === "mergeable") {
+
+    if (mr.merge_status === "can_be_merged") {
         return "Ready!"
     }
     if (mr.approved) { //lol doesn't work - is not part of the api
@@ -184,7 +119,7 @@ export function getText(mr: GitlabMergeRequests): string {
 }
 
 export function getState(mr: GitlabMergeRequests): string {
-    if (mr.has_conflicts) { 
+    if (mr.has_conflicts) {
         return "conflicts"
     }
     if (mr.draft) {
