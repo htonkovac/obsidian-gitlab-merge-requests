@@ -122,13 +122,18 @@ export function getState(mr: GitlabMergeRequests): string {
     if (mr.has_conflicts) {
         return "conflicts"
     }
+    // detailed_merege_status is still not available in the api
+    if (mr.merge_status === "cannot_be_merged" || mr.detailed_merge_status === "cannot_be_merged_recheck" || mr.detailed_merge_status === "cannot_be_merged_recheck_conflicts") { //not sure if cannot_be_merged_recheck_conflicts was hallucinated or really exists 
+        return "conflicts"
+    }
+    
     if (mr.draft) {
         return "draft"
     }
     if (mr.approved) {
         return "approved"
     }
-    if (mr.detailed_merge_status === "mergeable") {
+    if (mr.merge_status === "can_be_merged") {
         return "mergeable"
     }
     if (mr.state === "opened") {
