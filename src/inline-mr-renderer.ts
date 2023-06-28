@@ -4,6 +4,14 @@ import GitlabApi from "./gitlab-api"
 import { GitlabMergeRequests, customReference, getState, getText } from './gitlab-mr'
 import { SettingsData } from './settings';
 
+function transformTitle(title: string): string {
+    //if title starts with Draft: then remove it
+    if (title.startsWith("Draft: ")) {
+        return title.substring(7)
+    }
+    return title
+}
+
 export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     // convert to createEl calls
 
@@ -11,12 +19,12 @@ export function renderMR(mr: GitlabMergeRequests): HTMLElement {
     const mrLink = createEl('a', { cls: 'gitlab-mr-link', attr: { href: mr.web_url, target: '_blank' } })
     // mrLink.appendChild(createEl('input',{ cls: 'merged', attr: { type: 'checkbox' } }))
     mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state-indicator gitlab-mr-state-'+getState(mr), text: getText(mr)}))
-    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-id gitlab-mr-text', text: customReference(mr.references.full) }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-state', text: mr.state }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-author', text: mr.author.name }))
     // mrLink.appendChild(createSpan({ cls: 'gitlab-mr-created-at', text: mr.created_at }))
-
-    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-title gitlab-mr-text', text: mr.title }))
+    
+    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-title gitlab-mr-text', text: transformTitle(mr.title) }))
+    mrLink.appendChild(createSpan({ cls: 'gitlab-mr-id gitlab-mr-text', text: customReference(mr.references.full) }))
     container.appendChild(mrLink)
     return container
 }
