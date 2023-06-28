@@ -108,9 +108,9 @@ export function getText(mr: GitlabMergeRequests): string {
         return "Discuss"
     }
 
-    if (mr.merge_status === "can_be_merged") { //can_be_merged doesn't account for approvals
-        return "Ready!"
-    }
+    // if (mr.merge_status === "can_be_merged") { //can_be_merged doesn't account for approvals
+    //     return "Ready!"
+    // }
     if (mr.approved) { //lol doesn't work - is not part of the api
         return "Approved"
     }
@@ -140,7 +140,7 @@ export function getState(mr: GitlabMergeRequests): string {
         return "conflicts"
     }
 
-    if (mr.blocking_discussions_resolved) {
+    if (!mr.blocking_discussions_resolved) {
         return "draft"
     }
 

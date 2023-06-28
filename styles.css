@@ -149,3 +149,11 @@ gitlab-inline-merge-request gitlab-merge-request-container
 .gitlab-merge-request-container .icon-link:hover {
     text-decoration: none;
 }
+
+.gitlab-mr-id {
+    color: var(--color-base-50);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-right: 4px;
+}
